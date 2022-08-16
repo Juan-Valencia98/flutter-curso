@@ -2,39 +2,26 @@ import 'dart:math' as math;
 
 void main() {
   
-  final cuadrado = new Cuadrado( 2 );
+  final cuadrado = new Cuadrado( );
   
-  cuadrado.area = 100;
-  
-  print( 'area: ${ cuadrado.calculaArea() }' );
-  
-  print( 'lado: ${ cuadrado.lado }' );
+  cuadrado.area = 10;
+
   print( 'area get: ${ cuadrado.area }' );
-  
-  
-  
 }
 
 
 class Cuadrado {
   
-  double lado;  // lado * lado
+  double lado=0;  // lado * lado
    
   
   double get area {
-    return this.lado * this.lado;
+    return this.lado;
   }
   
-  set area( double valor ) {
-    this.lado = math.sqrt(valor);
-  }
-  
-  
-  
-  Cuadrado( double lado ):
+  set area( double lado ) {
     this.lado = lado;
-  
-  double calculaArea() {
-    return this.lado * this.lado;
   }
+  
+  
 }
