@@ -4,6 +4,7 @@ void main() {
   
 //   saludar( nombre, 'Greetings' );
   saludar2( nombre: nombre, mensaje: 'Greetings' );
+  saludar(nombre, 'Hola');
   
 }
 
@@ -18,5 +19,4 @@ void saludar2({
  }) {
   print('$mensaje $nombre');
 }
-
 
