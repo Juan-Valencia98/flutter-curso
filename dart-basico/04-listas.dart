@@ -1,15 +1,36 @@
 void main() {
   
+//   Map persona = {
+//     'nombre': 'Fernando',
+//     'edad': 35,
+//     'soltero': false,
+//     true: false,
+//     1: 100,
+//     2: 500
+//   };
   
-  List<int> numeros = [1,2,3,4,5,6,7,8,9,10];
-  numeros.add(11);
-  print( numeros );
+  List<Map<String, dynamic>> persona = [
+    {
+      'nombre': 'Fernando',
+      'edad': 35,
+      'soltero': false,
+    },
+    {
+      'nombre': 'Juan',
+      'edad': 21,
+      'soltero': true,
+    },
+                                       
+                                       ];
   
-  print(numeros[0]);
-  for (var item in numeros) {
-    print(item);
+  persona.addAll([{
+      'nombre': 'Carlos',
+      'edad': 35,
+      'soltero': false,
+  }]);
+  for(var lista in persona){
+    print(lista['nombre']);
   }
-  final masNumeros = List.generate(100, (int index) => index );
- 
-  print(masNumeros);
+  print(persona[0]['nombre']);
+  print( persona );
 }
