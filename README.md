@@ -6,16 +6,17 @@
 - https://developer.android.com/studio?hl=es-419&gclid=EAIaIQobChMI_rLtqqHK-QIVs-BcCh3fTA1WEAAYASAAEgKfnfD_BwE&gclsrc=aw.ds
 
 
-## Instalacion de FLUTTER VIDEOS
+## Instalación de FLUTTER VIDEOS
  - https://youtu.be/8DAoGbLOttQ
  - https://www.youtube.com/watch?v=0D1LvbkmzZo
  
-## Documentacion sobre flutter
+## Documentacón sobre flutter
  - https://docs.flutter.dev/cookbook
  - https://docs.flutter.dev/development/ui/widgets/material
+ - https://api.flutter.dev/flutter/material/AboutDialog-class.html
 
 
-## Creacion de nuestra primera aplicacion
+## Creación de nuestra primera aplicacion
  - https://docs.flutter.dev/development/ui/layout/tutorial
 
 
