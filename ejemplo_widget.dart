@@ -64,11 +64,19 @@ class MyStatelessWidget extends StatelessWidget {
                 Container(
                   width: 100,
                   color: Colors.red,
-                  child: Column(
+                  child: ListView(
                     children: [
                       Container(
                         height: 50,
                         color: Colors.blue,
+                      ),
+                      Container(
+                        height: 50,
+                        color: Colors.white,
+                      ),
+                      Container(
+                        height: 50,
+                        color: Colors.yellow,
                       ),
                     ],
                   ),
