@@ -63,7 +63,19 @@ class MyStatelessWidget extends StatelessWidget {
               children: [
                 Container(
                   width: 100,
-                  color: Colors.red
+                  color: Colors.red,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 50,
+                        color: Colors.blue,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 100,
+                  color: Colors.white
                 ),
               ],
             ),
