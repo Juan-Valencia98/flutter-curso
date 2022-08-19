@@ -13,8 +13,12 @@
 ## Documentacón sobre flutter
  - https://docs.flutter.dev/cookbook
  - https://docs.flutter.dev/development/ui/widgets/material
- - https://api.flutter.dev/flutter/material/AboutDialog-class.html
+ - https://flutterflow.io/
 
+## Principales links
+ - https://fluttergems.dev/
+ - https://pub.dev/
+ - 
 
 ## Creación de nuestra primera aplicacion
  - https://docs.flutter.dev/development/ui/layout/tutorial
