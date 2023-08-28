@@ -20,6 +20,10 @@
  - https://pub.dev/
  - https://play.google.com/console/developers
 
+## Curiosidades
+ - https://dartpad.dev/
+ - https://flutterthemer.github.io/#/
+
 ## Creación de nuestra primera aplicacion
  - https://docs.flutter.dev/development/ui/layout/tutorial
 
