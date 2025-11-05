@@ -1,124 +1,66 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
-
+// Punto de entrada principal de la aplicación Flutter
+// runApp() inicia la app y muestra el widget MyApp como raízoid main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+}
 //////////////////////////// W I D G E T S //////////////////////////////
+
+// HomePage es un StatefulWidget porque su estado cambia con cada pulsación de botón
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   State createState() => HomePageState();
 }
 
+// Estado de la página principal donde se manejan los cálculos y actualizaciones de pantalla
 class HomePageState extends State<HomePage> {
+  // Lista de operadores válidos
   List<String> operators = ["+", "-", "×", "÷"];
+  // Historial de operaciones
   List<String> hist = [];
   String history = "0", output = "0";
-  var answer = 0.0;
-  void click1() {
+  var answer = 0.0; // Resultado numérico
+
+  //////////////////////////// FUNCIONES DE BOTONES NUMÉRICOS ////////////////////////////
+
+  // Cada función clickX actualiza la salida dependiendo si hay un número previo distinto de 0
+  void click1() => _appendNumber("1");
+  void click2() => _appendNumber("2");
+  void click3() => _appendNumber("3");
+  void click4() => _appendNumber("4");
+  void click5() => _appendNumber("5");
+  void click6() => _appendNumber("6");
+  void click7() => _appendNumber("7");
+  void click8() => _appendNumber("8");
+  void click9() => _appendNumber("9");
+  void click0() => _appendNumber("0");
+
+  // Método auxiliar para reducir repetición de código en los clicks numéricos
+  void _appendNumber(String number) {
     setState(() {
-      if (double.parse(output) != 0.0) {
-        output += "1";
+      if (double.tryParse(output) != 0.0) {
+        output += number;
       } else {
-        output = "1";
+        output = number;
       }
     });
   }
 
-  void click2() {
-    setState(() {
-      if (double.parse(output) != 0.0) {
-        output += "2";
-      } else {
-        output = "2";
-      }
-    });
-  }
+  //////////////////////////// FUNCIONES ESPECIALES ////////////////////////////
 
-  void click3() {
-    setState(() {
-      if (double.parse(output) != 0.0) {
-        output += "3";
-      } else {
-        output = "3";
-      }
-    });
-  }
-
-  void click4() {
-    setState(() {
-      if (double.parse(output) != 0.0) {
-        output += "4";
-      } else {
-        output = "4";
-      }
-    });
-  }
-
-  void click5() {
-    setState(() {
-      if (double.parse(output) != 0.0) {
-        output += "5";
-      } else {
-        output = "5";
-      }
-    });
-  }
-
-  void click6() {
-    setState(() {
-      if (double.parse(output) != 0.0) {
-        output += "6";
-      } else {
-        output = "6";
-      }
-    });
-  }
-
-  void click7() {
-    setState(() {
-      if (double.parse(output) != 0.0) {
-        output += "7";
-      } else {
-        output = "7";
-      }
-    });
-  }
-
-  void click8() {
-    setState(() {
-      if (double.parse(output) != 0.0) {
-        output += "8";
-      } else {
-        output = "8";
-      }
-    });
-  }
-
-  void click9() {
-    setState(() {
-      if (double.parse(output) != 0.0) {
-        output += "9";
-      } else {
-        output = "9";
-      }
-    });
-  }
-
-  void click0() {
-    setState(() {
-      if (double.parse(output) != 0.0) {
-        output += "0";
-      } else {
-        output = "0";
-      }
-    });
-  }
-
+  // Agregar punto decimal
   void clickDot() {
     setState(() {
-      output += ".";
+      if (!output.contains('.')) {
+        output += ".";
+      }
     });
   }
 
+  // Borrar todo (reinicia calculadora)
   void clear() {
     setState(() {
       history = "";
@@ -128,53 +70,49 @@ class HomePageState extends State<HomePage> {
     });
   }
 
+  // Cambiar signo del número actual (+/-)
   void sign() {
     setState(() {
-      if (double.parse(output) == 0.0) {
-      } else {
-        if (output[0] == '-') {
+      if (output != "0") {
+        if (output.startsWith('-')) {
           output = output.substring(1);
         } else {
-          output = '-' + output;
+          output = '-$output';
         }
       }
     });
   }
 
+  // Calcular porcentaje del resultado actual
   void percent() {
     setState(() {
-      double percent = 0.0;
-      percent = answer / 100;
-      history = answer.toString() + " ÷ 100 =";
+      double percent = answer / 100;
+      history = "$answer ÷ 100 =";
       output = percent.toString();
     });
   }
 
-  String getTape() {
-    return hist.join(" ");
-  }
+  //////////////////////////// FUNCIONES DE OPERACIÓN ////////////////////////////
 
-  bool isOperator(String s) {
-    return (operators.contains(s));
-  }
+  // Obtener toda la operación concatenada
+  String getTape() => hist.join(" ");
 
-  bool isNumeric(String s) {
-    if (s == null) {
-      return false;
-    }
-    return double.parse(s) != null;
-  }
+  // Verificar si el símbolo es operador
+  bool isOperator(String s) => operators.contains(s);
 
+  // Calcular resultado final al presionar "="
   void equals() {
     setState(() {
-      if (hist.length <= 3) {
-        hist.add(output);
-      }
-      history = getTape() + " =";
-      var opr1, opr2, op;
-      opr1 = double.parse(hist.removeAt(0));
-      op = hist.removeAt(0);
-      opr2 = double.parse(hist.removeAt(0));
+      if (hist.length <= 3) hist.add(output);
+
+      history = "${getTape()} =";
+
+      // Extraemos operandos y operador
+      var opr1 = double.parse(hist.removeAt(0));
+      var op = hist.removeAt(0);
+      var opr2 = double.parse(hist.removeAt(0));
+
+      // Operación según el operador
       switch (op) {
         case "+":
           answer = opr1 + opr2;
@@ -188,68 +126,38 @@ class HomePageState extends State<HomePage> {
         case "÷":
           answer = opr1 / opr2;
           break;
-        default:
       }
+
+      // Mostrar resultado en pantalla
       output = answer.toString();
       hist.insert(0, answer.toString());
     });
   }
 
-  void add() {
+  // Funciones para cada operador (+, -, ×, ÷)
+  void add() => _setOperation("+");
+  void sub() => _setOperation("-");
+  void div() => _setOperation("÷");
+  void mul() => _setOperation("×");
+
+  // Método genérico para reducir repetición entre operaciones
+  void _setOperation(String operator) {
     setState(() {
       answer = double.parse(output);
       hist.add(output);
-      hist.add("+");
+      hist.add(operator);
+
       if (hist.length >= 3) {
         output = "0";
         equals();
       }
+
       output = "0";
       history = getTape();
     });
   }
 
-  void sub() {
-    setState(() {
-      answer = double.parse(output);
-      hist.add(output);
-      hist.add("-");
-      if (hist.length >= 3) {
-        output = "0";
-        equals();
-      }
-      output = "0";
-      history = getTape();
-    });
-  }
-
-  void div() {
-    setState(() {
-      answer = double.parse(output);
-      hist.add(output);
-      hist.add("÷");
-      if (hist.length >= 3) {
-        output = "0";
-        equals();
-      }
-      output = "0";
-      history = getTape();
-    });
-  }
-
-  void mul() {
-    setState(() {
-      answer = double.parse(output);
-      hist.add(output);
-      hist.add("×");
-      if (hist.length >= 3) {
-        output = "0";
-        equals();
-      }
-      output = "0";
-      history = getTape();
-    });
-  }
+  //////////////////////////// INTERFAZ GRÁFICA ////////////////////////////
 
   @override
   Widget build(BuildContext context) {
@@ -257,337 +165,145 @@ class HomePageState extends State<HomePage> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.deepOrangeAccent.shade400,
-        title: Text('Calculator'),
+        title: const Text('Calculadora'),
       ),
-      body: Container(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 25.0, right: 15.0),
-                child: Text(
-                  history,
-                  overflow: TextOverflow.fade,
-                  maxLines: 1,
-                  style: const TextStyle(
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.w200,
-                  ),
-                  textAlign: TextAlign.end,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 15.0, right: 15.0, bottom: 15.0),
-                child: Text(
-                  "$output",
-                  overflow: TextOverflow.fade,
-                  maxLines: 1,
-                  style: TextStyle(
-                    fontSize: 60.0,
-                    fontWeight: FontWeight.w100,
-                  ),
-                  textAlign: TextAlign.end,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0, left: 5.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      RawMaterialButton(
-                        onPressed: clear,
-                        child: Icon(
-                          Icons.block,
-                          size: 35.0,
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.deepOrangeAccent.shade400,
-                        padding: const EdgeInsets.all(15.0),
-                      ),
-                      RawMaterialButton(
-                        onPressed: sign,
-                        child: Text(
-                          "±",
-                          style: TextStyle(
-                              fontSize: 35.0, fontWeight: FontWeight.w500),
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.deepOrangeAccent.shade400,
-                        padding: const EdgeInsets.all(15.0),
-                      ),
-                      RawMaterialButton(
-                        onPressed: percent,
-                        child: Text(
-                          "%",
-                          style: TextStyle(
-                              fontSize: 35.0, fontWeight: FontWeight.w500),
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.deepOrangeAccent.shade400,
-                        padding: const EdgeInsets.all(15.0),
-                      ),
-                      RawMaterialButton(
-                        onPressed: div,
-                        child: Text(
-                          "÷",
-                          style: TextStyle(
-                              fontSize: 35.0,
-                              color: Colors.deepOrangeAccent.shade400,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.white,
-                        highlightColor: Colors.deepOrangeAccent.shade400,
-                        splashColor: Colors.red[100],
-                        padding: const EdgeInsets.all(15.0),
-                      )
-                    ]),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 15.0, left: 5.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      RawMaterialButton(
-                        onPressed: click1,
-                        child: Text(
-                          "1",
-                          style: TextStyle(
-                              fontSize: 35.0, fontWeight: FontWeight.w500),
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.black45,
-                        padding: const EdgeInsets.all(15.0),
-                      ),
-                      RawMaterialButton(
-                        onPressed: click2,
-                        child: Text(
-                          "2",
-                          style: TextStyle(
-                              fontSize: 35.0, fontWeight: FontWeight.w500),
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.black45,
-                        padding: const EdgeInsets.all(15.0),
-                      ),
-                      RawMaterialButton(
-                        onPressed: click3,
-                        child: Text(
-                          "3",
-                          style: TextStyle(
-                              fontSize: 35.0, fontWeight: FontWeight.w500),
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.black45,
-                        padding: const EdgeInsets.all(15.0),
-                      ),
-                      RawMaterialButton(
-                        onPressed: mul,
-                        child: Text(
-                          "×",
-                          style: TextStyle(
-                              fontSize: 35.0,
-                              color: Colors.red[700],
-                              fontWeight: FontWeight.w500),
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.white,
-                        highlightColor: Colors.red[100],
-                        splashColor: Colors.red[100],
-                        padding: const EdgeInsets.all(15.0),
-                      )
-                    ]),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 15.0, left: 5.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      RawMaterialButton(
-                        onPressed: click4,
-                        child: Text(
-                          "4",
-                          style: TextStyle(
-                              fontSize: 35.0, fontWeight: FontWeight.w500),
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.black45,
-                        padding: const EdgeInsets.all(15.0),
-                      ),
-                      RawMaterialButton(
-                        onPressed: click5,
-                        child: Text(
-                          "5",
-                          style: TextStyle(
-                              fontSize: 35.0, fontWeight: FontWeight.w500),
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.black45,
-                        padding: const EdgeInsets.all(15.0),
-                      ),
-                      RawMaterialButton(
-                        onPressed: click6,
-                        child: Text(
-                          "6",
-                          style: TextStyle(
-                              fontSize: 35.0, fontWeight: FontWeight.w500),
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.black45,
-                        padding: const EdgeInsets.all(15.0),
-                      ),
-                      RawMaterialButton(
-                        onPressed: sub,
-                        child: Text(
-                          "-",
-                          style: TextStyle(
-                              fontSize: 35.0,
-                              color: Colors.red[700],
-                              fontWeight: FontWeight.w500),
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.white,
-                        highlightColor: Colors.red[100],
-                        splashColor: Colors.red[100],
-                        padding: const EdgeInsets.all(15.0),
-                      )
-                    ]),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 15.0, left: 5.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      RawMaterialButton(
-                        onPressed: click7,
-                        child: Text(
-                          "7",
-                          style: TextStyle(
-                              fontSize: 35.0, fontWeight: FontWeight.w500),
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.black45,
-                        padding: const EdgeInsets.all(15.0),
-                      ),
-                      RawMaterialButton(
-                        onPressed: click8,
-                        child: Text(
-                          "8",
-                          style: TextStyle(
-                              fontSize: 35.0, fontWeight: FontWeight.w500),
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.black45,
-                        padding: const EdgeInsets.all(15.0),
-                      ),
-                      RawMaterialButton(
-                        onPressed: click9,
-                        child: Text(
-                          "9",
-                          style: TextStyle(
-                              fontSize: 35.0, fontWeight: FontWeight.w500),
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.black45,
-                        padding: const EdgeInsets.all(15.0),
-                      ),
-                      RawMaterialButton(
-                        onPressed: add,
-                        child: Text(
-                          "+",
-                          style: TextStyle(
-                              fontSize: 35.0,
-                              color: Colors.red[700],
-                              fontWeight: FontWeight.w500),
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.white,
-                        highlightColor: Colors.red[100],
-                        splashColor: Colors.red[100],
-                        padding: const EdgeInsets.all(15.0),
-                      )
-                    ]),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 15.0, left: 5.0, bottom: 6.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      RawMaterialButton(
-                        onPressed: click0,
-                        child: Text(
-                          "0",
-                          style: TextStyle(
-                              fontSize: 35.0, fontWeight: FontWeight.w500),
-                        ),
-                        constraints: BoxConstraints.tightFor(width: 170.0),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(45.0)),
-                        elevation: 2.0,
-                        fillColor: Colors.black45,
-                        padding: const EdgeInsets.only(
-                            left: 18.0, top: 15.0, bottom: 15.0, right: 15.0),
-                      ),
-                      RawMaterialButton(
-                        onPressed: clickDot,
-                        child: Text(
-                          ".",
-                          style: TextStyle(
-                              fontSize: 35.0, fontWeight: FontWeight.w500),
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.black45,
-                        padding: const EdgeInsets.all(15.0),
-                      ),
-                      RawMaterialButton(
-                        onPressed: equals,
-                        child: Text(
-                          "=",
-                          style: TextStyle(
-                              fontSize: 35.0, fontWeight: FontWeight.w500),
-                        ),
-                        shape: CircleBorder(),
-                        elevation: 2.0,
-                        fillColor: Colors.deepOrangeAccent.shade400,
-                        padding: const EdgeInsets.all(15.0),
-                      )
-                    ]),
-              ),
-            ]),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          // Pantalla del historial
+          Padding(
+            padding: const EdgeInsets.only(top: 25.0, right: 15.0),
+            child: Text(
+              history,
+              overflow: TextOverflow.fade,
+              maxLines: 1,
+              style: const TextStyle(fontSize: 25.0, fontWeight: FontWeight.w200),
+              textAlign: TextAlign.end,
+            ),
+          ),
+
+          // Pantalla de salida (resultado actual)
+          Padding(
+            padding: const EdgeInsets.only(top: 15.0, right: 15.0, bottom: 15.0),
+            child: Text(
+              output,
+              overflow: TextOverflow.fade,
+              maxLines: 1,
+              style: const TextStyle(fontSize: 60.0, fontWeight: FontWeight.w100),
+              textAlign: TextAlign.end,
+            ),
+          ),
+
+          // Filas de botones — cada fila se agrupa en un Row con 4 botones
+          _buildButtonRow([
+            _iconButton(Icons.block, clear, Colors.deepOrangeAccent.shade400),
+            _textButton("±", sign, Colors.deepOrangeAccent.shade400),
+            _textButton("%", percent, Colors.deepOrangeAccent.shade400),
+            _textButton("÷", div, Colors.white, textColor: Colors.deepOrangeAccent.shade400),
+          ]),
+
+          _buildButtonRow([
+            _textButton("1", click1, Colors.black45),
+            _textButton("2", click2, Colors.black45),
+            _textButton("3", click3, Colors.black45),
+            _textButton("×", mul, Colors.white, textColor: Colors.red[700]),
+          ]),
+
+          _buildButtonRow([
+            _textButton("4", click4, Colors.black45),
+            _textButton("5", click5, Colors.black45),
+            _textButton("6", click6, Colors.black45),
+            _textButton("-", sub, Colors.white, textColor: Colors.red[700]),
+          ]),
+
+          _buildButtonRow([
+            _textButton("7", click7, Colors.black45),
+            _textButton("8", click8, Colors.black45),
+            _textButton("9", click9, Colors.black45),
+            _textButton("+", add, Colors.white, textColor: Colors.red[700]),
+          ]),
+
+          _buildButtonRow([
+            _wideButton("0", click0),
+            _textButton(".", clickDot, Colors.black45),
+            _textButton("=", equals, Colors.deepOrangeAccent.shade400),
+          ]),
+        ],
+      ),
+    );
+  }
+
+  //////////////////////////// MÉTODOS AUXILIARES PARA BOTONES ////////////////////////////
+
+  // Crea un botón de texto genérico
+  Widget _textButton(String text, VoidCallback onPressed, Color color, {Color? textColor}) {
+    return RawMaterialButton(
+      onPressed: onPressed,
+      shape: const CircleBorder(),
+      elevation: 2.0,
+      fillColor: color,
+      padding: const EdgeInsets.all(15.0),
+      child: Text(
+        text,
+        style: TextStyle(fontSize: 35.0, fontWeight: FontWeight.w500, color: textColor ?? Colors.white),
+      ),
+    );
+  }
+
+  // Crea un botón con ícono
+  Widget _iconButton(IconData icon, VoidCallback onPressed, Color color) {
+    return RawMaterialButton(
+      onPressed: onPressed,
+      shape: const CircleBorder(),
+      elevation: 2.0,
+      fillColor: color,
+      padding: const EdgeInsets.all(15.0),
+      child: Icon(icon, size: 35.0),
+    );
+  }
+
+  // Crea un botón ancho para el número 0
+  Widget _wideButton(String text, VoidCallback onPressed) {
+    return RawMaterialButton(
+      onPressed: onPressed,
+      constraints: const BoxConstraints.tightFor(width: 170.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(45.0)),
+      elevation: 2.0,
+      fillColor: Colors.black45,
+      padding: const EdgeInsets.all(15.0),
+      child: Text(text, style: const TextStyle(fontSize: 35.0, fontWeight: FontWeight.w500)),
+    );
+  }
+
+  // Construye una fila de botones
+  Widget _buildButtonRow(List<Widget> buttons) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15.0, left: 5.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: buttons,
       ),
     );
   }
 }
 
 ///////////////////////////// A P P  W I D G E T ///////////////////////////
+
+// Widget raíz que configura el tema de la app
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Calcon",
+      title: "Calculadora",
       theme: ThemeData(
-          primarySwatch: Colors.red,
-          accentColor: Colors.deepOrange,
-          brightness: Brightness.dark),
-      home: HomePage(),
+        primarySwatch: Colors.red,
+        hintColor: Colors.deepOrange,
+        brightness: Brightness.dark,
+      ),
+      home: const HomePage(),
     );
   }
 }
